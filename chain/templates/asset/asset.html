@@ -111,7 +111,7 @@
 
                             <form id="cha" class="form-horizontal" action="{% url 'asset:asset_list' %}" method="GET">
                                 {% csrf_token %}
-                                <div class="col-md-2"><input type="text" class="form-control" name="name" placeholder="主机名、IP" required></div>
+                                <div class="col-md-2"><input type="text" class="form-control" name="name" placeholder="基站名\基站号" required></div>
                                 <button class="btn btn-sm btn-primary" type="submit">查询</button>
 
                                                                 {% if perms.asset.add_assetinfo %}
@@ -124,14 +124,41 @@
                                     <thead>
                                     <tr>
                                         <th width="20"><input type="checkbox" id="CheckedAll"></th>
-                                        <th>主机名</th>
-                                        <th>内网IP</th>
-                                        <th>外网IP</th>
-                                        <th>平台</th>
-                                        <th>项目</th>
-                                        <th>业务</th>
-                                        <th>激活</th>
-                                        <th>动作</th>
+                                        <th>网元类型</th>
+                                        <th>网元Fdn</th>
+                                        <th>网元名称</th>
+                                        <th>BIOS版本</th>
+                                        <th>扩展的BIOS版本</th>
+                                        <th>单板名称</th>
+                                        <th>单板类型</th>
+                                        <th>最后服务时间</th>
+                                        <th>生产日期</th>
+                                        <th>扩展信息</th>
+                                        <th>机框号</th>
+                                        <th>资产单元标识</th>
+                                        <th>资产单元类型</th>
+                                        <th>发行号</th>
+                                        <th>BOM编码</th>
+                                        <th>LAN版本</th>
+                                        <th>逻辑版本</th>
+                                        <th>MBUS版本</th>
+                                        <th>特殊信息</th>
+                                        <th>对外型号</th>
+                                        <th>所属模块号</th>
+                                        <th>端口号</th>
+                                        <th>机柜号</th>
+                                        <th>资产序列号</th>
+                                        <th>槽位号</th>
+                                        <th>槽位位置</th>
+                                        <th>软件版本</th>
+                                        <th>扣板槽位号</th>
+                                        <th>资产单元位置信息</th>
+                                        <th>用户友好名</th>
+                                        <th>供应商名称</th>
+                                        <th>资产归属类型</th>
+                                        <th>资产单元类型码</th>
+                                        <th>硬件版本号</th>
+
                                     </tr>
                                     </thead>
 

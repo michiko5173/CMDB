@@ -1,0 +1,385 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block  title %}创建任务{% endblock %}
+{% block header-css %}
+    <link href="{% static 'css/plugins/ztree/awesomeStyle/awesome.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block page-content %}
+
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>创建任务</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/index.html">主页</a>
+                </li>
+                <li>
+                    <a>作业中心</a>
+                </li>
+                <li class="active">
+                    <strong>创建任务</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-2" id="split-left">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content mailbox-content" style="padding-top: 0">
+                        <div class="file-manager ">
+
+                            <div class="clearfix">
+                                <div data-options="iconCls:'icon-save'" title="ztree事件">
+                                    <ul id="ztree4" class="ztree"></ul>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="form-horizontal  tool_from">
+                <div class="col-lg-5">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>创建任务</h5>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项 1</a>
+                                    </li>
+                                    <li><a href="#">选项 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="table-responsive">
+
+                                    <table class="table table-striped table-bordered table-hover dataTables-example">
+                                        <thead>
+                                        <tr>
+                                            <th width="20"><input type="checkbox" id="CheckedAssetAll"></th>
+                                            <th>主机名</th>
+                                            <th>内网IP</th>
+                                            <th>资产用户</th>
+                                            <th>资产项目</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for   row   in   asset_list %}
+
+                                            <tr class="gradeA" id="{{ row.id }}">
+                                                <td><input type="checkbox" value="{{ row.id }}" n="{{ row.hostname }}"
+                                                           name="asset_id"></td>
+                                                <td class="center"><a
+                                                        href="{% url  "asset:asset_detail"   pk=row.id %}">{{ row.hostname }}</a>
+                                                </td>
+                                                <td class="center">{{ row.network_ip }}</td>
+                                                <td class="center">{{ row.user }}</td>
+                                                <td class="center">{{ row.project }} </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+
+                                    </table>
+
+                                    <div class="ibox-content">
+                                        <a id="exec" class="btn btn-primary" type="submit">创建任务</a>
+                                        <button class="btn btn-white" type="button" onclick='clearBody()'>取消
+                                        </button>
+
+
+                                    </div>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-lg-5">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>工具列表</h5>
+                            <div style="color:red;">   优先级1 最先执行, 不可重复</div>
+                            <div class="ibox-tools">
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">选项 1</a>
+                                    </li>
+                                    <li><a href="#">选项 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="table-responsive">
+
+                                <table class="table table-striped table-bordered table-hover dataTables-example">
+                                    <thead>
+                                    <tr>
+                                        <th width="20"><input type="checkbox" id="CheckedToolsAll"></th>
+
+                                        <th>工具名称</th>
+                                        <th>优先级</th>
+                                        <th>工具类型</th>
+
+
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for   row   in   tools_list %}
+
+                                        <tr class="gradeA" id="{{ row.id }}">
+                                            <td><input type="checkbox" value="{{ row.id }}" n="{{ row.name }}"
+                                                       name="tool_id"></td>
+                                            <td class="center"><a
+                                                    href="{% url  "tasks:tools_update"   pk=row.id %}">{{ row.name }}</a>
+                                            </td>
+                                            <td><input style="width:50px;"  class="form-control input-sm" name="priority"  ></td>
+                                            <td class="center">{{ row.tool_run_type }}</td>
+
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+
+                                </table>
+
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    {% block footer-js %}
+
+
+        <script>
+
+            $("#CheckedAssetAll").click(function () {
+                if ($(this).is(":checked")) {
+                    $("[name=asset_id]:checkbox").prop("checked", true);
+                } else {
+                    $("[name=asset_id]:checkbox").prop("checked", false);
+                }
+            });
+            $("#CheckedToolsAll").click(function () {
+                if ($(this).is(":checked")) {
+                    $("[name=tool_id]:checkbox").prop("checked", true);
+                } else {
+                    $("[name=tool_id]:checkbox").prop("checked", false);
+                }
+            });
+
+
+            $(function () {
+
+
+                $(document).ready(function () {
+                    $('.dataTables-asset').DataTable({
+
+                        "oLanguage": {
+                            "sLengthMenu": "每页显示 _MENU_ 条记录",
+                            "sZeroRecords": "对不起，查询不到任何相关数据",
+                            "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_条记录",
+                            "sInfoEmtpy": "找不到相关数据",
+                            "sInfoFiltered": " 数据表中共为 _MAX_ 条记录",
+                            "sProcessing": "正在加载中...",
+                            "sSearch": "搜索",
+                            "oPaginate": {
+                                "sFirst": "第一页",
+                                "sPrevious": " 上一页 ",
+                                "sNext": " 下一页 ",
+                                "sLast": " 最后一页 "
+                            }
+                        },
+                        "order": [[1, 'desc']],
+                        destroy: true,
+
+
+                        bPaginate: false,
+                        dom: '<"html5buttons"B>lTfgitp,'
+
+                    });
+                });
+
+                $(document).on('click', '#exec', function () {
+
+
+                    var obj = document.getElementsByName("tool_id");
+                    tool_id_list = [];
+                    tool_id_name = [];
+                    for (var i = 0; i < obj.length; i++) {
+                        if (obj[i].checked) {
+                            tool_id_list.push(obj[i].value);
+                            tool_id_name.push(obj[i].getAttribute('n'));
+                        }
+                    }
+
+
+                    var asset = document.getElementsByName('asset_id');
+                    asset_id_name = [];
+                    asset_id_list = [];
+                    for ( var a = 0; a < asset.length; a++) {
+                        if (asset[a].checked) {
+                            asset_id_list.push(asset[a].value);
+                            asset_id_name.push(asset[a].getAttribute('n'));
+                    }
+                    }
+
+                    swal({
+
+                        title: "你确定提交执行任务,无法取消",
+                        text: "主机名称 " + asset_id_name + "\n" + "工具名称 " + tool_id_name,
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确定",
+
+                        closeOnConfirm: false
+                    }, function () {
+
+
+                        $.ajax({
+                            url: '{% url  'tasks:tools_exec' %}',
+                            type: 'POST',
+                            data: $('.tool_from').serialize(),
+                            success: function (data) {
+                                var obj = JSON.parse(data);
+                                if (obj.status) {
+                                    swal({
+                                        title: "任务",
+                                        text: "已成功创建 id:" + obj.id + '\n\n' + "请稍后查询结果",
+                                        type: "success"
+                                    }, function () {
+                                        window.location.reload();
+                                    })
+                                } else {
+                                    swal("错误", "[ " + obj.error + " ]", "error");
+                                }
+                            }
+                        });
+
+
+                    });
+                });
+
+
+            });
+
+
+            function clearBody() {
+                location.reload()
+            }
+
+
+        </script>
+
+
+        <script type="text/javascript">
+            $(function () {
+                var setting = {
+                    view: {
+                        showLine: true,
+                        selectedMulti: false,
+                        dblClickExpand: false
+                    },
+
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "pId",
+                            rootPId: 0
+                        }
+                    },
+
+                    callback: {
+                        beforeClick: getCurrentNode,
+                        {#                         onClick : zTreeOnClick#}
+                    }
+                };
+
+                $.ajax({
+                    url: '{% url  'asset:asset_ztree' %}',
+                    type: 'get',
+                    data: '',
+                    dataType: 'json',
+                    success: function (data) {
+                        zTreeObj = $.fn.zTree.init($("#ztree4"), setting, data);
+                        zTreeObj.expandAll(true);
+                    }
+                });
+            });
+
+            function getCurrentNode(treeId, treeNode) {
+                curNode = treeNode;
+                zTreeOnClick(curNode);
+            }
+
+            function zTreeOnClick(treeNode) {
+
+                    if (treeNode.id > 0  &&  treeNode.id < 10000 ) {
+                    window.location.href = encodeURI('/tasks/tools-exec.html?project=' + treeNode.n)
+                }
+                else {
+                    window.location.href = encodeURI('/tasks/tools-exec.html?business=' + treeNode.id+'&project=' + treeNode.pId)
+                }
+                if (treeNode.id == 0) {
+                    window.location.href = '{% url  "tasks:tools_exec"  %}'
+                }
+
+
+
+            }
+
+
+        </script>
+
+    {% endblock %}
+
+{% endblock %}

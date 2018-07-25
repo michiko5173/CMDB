@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block  title %}命令操作{% endblock %}
+{% block header-css %}
+   <link href="{% static 'css/plugins/ztree/awesomeStyle/awesome.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block page-content %}
+
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>命令操作</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="/index.html">主页</a>
+                </li>
+                <li>
+                    <a>作业中心</a>
+                </li>
+                <li class="active">
+                    <strong>命令操作</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2">
+
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+         <div class="col-lg-2" id="split-left">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content mailbox-content" style="padding-top: 0">
+                        <div class="file-manager ">
+
+                            <div class="clearfix">
+                                <div data-options="iconCls:'icon-save'" title="ztree事件">
+                                    <ul id="ztree4" class="ztree"></ul>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>命令操作</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项 1</a>
+                                </li>
+                                <li><a href="#">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="table-responsive">
+                            <form class="form-horizontal  cmd_from">
+                     <table class="table table-striped table-bordered table-hover dataTables-example">
+                                    <thead>
+                                    <tr>
+                                        <th width="20"><input type="checkbox" id="CheckedAll"></th>
+                                        <th>主机名</th>
+                                        <th>内网IP</th>
+                                        <th>资产用户</th>
+                                        <th>资产项目</th>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    {% for   row   in   asset_list %}
+
+                                        <tr class="gradeA" id="{{ row.id }}">
+                                            <td><input type="checkbox" value="{{ row.id }}" name="id"></td>
+                                            <td class="center"><a
+                                                    href="{% url  "asset:asset_detail"   pk=row.id %}">{{ row.hostname }}</a>
+                                            </td>
+                                            <td class="center">{{ row.network_ip }}</td>
+                                            <td class="center">{{ row.user }}</td>
+                                            <td class="center">{{ row.project }}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+
+                                </table>
+
+                                <div class="ibox-content">
+                                <div class="form-group">
+
+
+                                        <div>
+
+                                            <select name="module" class="form-control" title="" required=""
+                                            id="id_cmd" style="width: 125px;float: left;">
+                                                {% for i in cmd_list %}
+                                                <option value="{{ i }}">{{ i }}</option>
+                                                {% endfor %}
+
+
+                                            </select>
+
+                                            <p></p>
+                                            <input type="button" class="btn btn-primary  " value="增加" id="addTable"
+                                                   onclick="add_tr(this)"/>
+                                            <input type="button" class="btn btn-danger  " value="删除" id="deleteTable"
+                                                   onclick="del_tr(this)"/>
+                                            <input class="form-control"    placeholder="命令"   name="args" title="" style="width:500px;">
+
+
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group">
+
+
+                                            <a id="cmd" class="btn btn-primary"  type="submit">执行</a>
+                                            <button class="btn btn-white" type="button" onclick='clearBody()'>取消
+                                            </button>
+
+                                    </div>
+
+
+
+                            </div>
+
+                                </form>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-sm-5">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>输出结果
+                        </h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-links">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">配置选项 1</a>
+                                </li>
+                                <li><a href="#">配置选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content  pres">
+
+                        <pre> <span id="err"></span></pre>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% block footer-js %}
+ <script>
+
+
+$(function () {
+
+            $(document).on('click','#cmd',function () {
+
+
+
+
+                    $.ajax({
+                        url: "{% url 'tasks:perform' %}",
+                        type: 'POST',
+                        data: $('.cmd_from').serialize(),
+                        success: function (data) {
+                            var obj = JSON.parse(data);
+                            cons = "";
+                            if (obj.data) {
+                                $.each(obj, function (data, values) {
+                                    $.each(values, function (index, value) {
+                                        cons += "<pre>" + "主机:" + value.hostname + "\n" + "结果: \n " + value.data + "</pre>"
+
+                                    });
+                                    $(".pres").html(cons); //把内容入到这个div中即完成
+                                });
+                            } else {
+                                $('#err').text(obj.error);
+                            }
+
+                        }
+
+                    })
+                });
+
+
+            });
+
+            function clearBody() {
+                location.reload()
+            }
+
+
+            function add_tr(obj) {
+                var tr = $(obj).parent();
+                tr.after(tr.clone());
+            }
+
+            function del_tr(obj) {
+                $(obj).parent().remove();
+            }
+
+ </script>
+
+
+
+ <script>
+
+
+            $(function () {
+                $(document).ready(function () {
+                $('.dataTables-asset').DataTable({
+
+                    "oLanguage": {
+                        "sLengthMenu": "每页显示 _MENU_ 条记录",
+                        "sZeroRecords": "对不起，查询不到任何相关数据",
+                        "sInfo": "当前显示 _START_ 到 _END_ 条，共 _TOTAL_条记录",
+                        "sInfoEmtpy": "找不到相关数据",
+                        "sInfoFiltered": " 数据表中共为 _MAX_ 条记录",
+                        "sProcessing": "正在加载中...",
+                        "sSearch": "搜索",
+                        "oPaginate": {
+                            "sFirst": "第一页",
+                            "sPrevious": " 上一页 ",
+                            "sNext": " 下一页 ",
+                            "sLast": " 最后一页 "
+                        }
+                    },
+                    "order": [[1, 'desc']],
+                    destroy: true,
+
+
+                    bPaginate: false,
+                    dom: '<"html5buttons"B>lTfgitp,'
+
+                });
+            });
+
+            });
+
+
+
+            $(function () {
+                var setting = {
+                    view: {
+                        showLine: true,
+                        selectedMulti: false,
+                        dblClickExpand: false
+                    },
+
+                    data: {
+                        simpleData: {
+                            enable: true,
+                            idKey: "id",
+                            pIdKey: "pId",
+                            rootPId: 0
+                        }
+                    },
+
+                    callback: {
+                        beforeClick: getCurrentNode,
+                        {#                         onClick : zTreeOnClick#}
+                    }
+                };
+
+                $.ajax({
+                    url: '{% url  'asset:asset_ztree' %}',
+                    type: 'get',
+                    data: '',
+                    dataType: 'json',
+                    success: function (data) {
+                        zTreeObj = $.fn.zTree.init($("#ztree4"), setting, data);
+                        zTreeObj.expandAll(true);
+                    }
+                });
+            });
+
+            function getCurrentNode(treeId, treeNode) {
+                curNode = treeNode;
+                zTreeOnClick(curNode);
+            }
+
+            function zTreeOnClick(treeNode) {
+
+
+              if (treeNode.id > 0  &&  treeNode.id < 10000 ) {
+                    window.location.href = encodeURI('/tasks/cmd.html?project=' + treeNode.n)
+                }
+                else {
+                    window.location.href = encodeURI('/tasks/cmd.html?business=' + treeNode.id+'&project=' + treeNode.pId)
+                }
+                if (treeNode.id == 0) {
+                    window.location.href = '{% url  "tasks:cmd"  %}'
+                }
+            }
+
+
+        </script>
+
+    {% endblock %}
+
+{% endblock %}

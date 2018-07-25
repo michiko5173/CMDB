@@ -1,0 +1,95 @@
+<nav class="navbar-default navbar-static-side  " role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+
+
+                            <span class="clear"> <span class="block m-t-xs"> <strong
+                                    class="font-bold">{{ user }}</strong>
+
+                             </span> <span class="text-muted text-xs block">
+                                {% ifequal  user.is_superuser  1 %}
+                                    管理员 {% else %} 普通用户 {% endifequal %}
+                                <b class="caret"></b></span> </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="{% url  "password_update" %}">修改密码</a></li>
+                        <li><a href="/logout.html">登出</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    Chain
+                </div>
+            </li>
+            <li>
+                <a href="{% url "index" %}"><i class="fa fa-dashboard"></i> <span class="nav-label">首页</span>
+                </a>
+
+            </li>
+            <li class="{{ asset_active }}">
+                <a href="#"><i class="fa fa-inbox"></i> <span class="nav-label">资产管理</span>
+                    <span class="fa arrow"> </span></a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ asset_list_active }}"><a href="{% url    'asset:asset_list' %}">资产信息</a></li>
+                    <li class="{{ asset_user_list_active }}"><a href="{% url    'asset:asset_user_list' %}">资产用户</a></li>
+                      <li class="{{ asset_project_list_active }}"><a href="{% url    'asset:asset_project_list' %}">资产项目</a></li>
+                     <li class="{{ asset_business_list_active }}"><a href="{% url    'asset:asset_business_list' %}">资产业务</a></li>
+
+
+                </ul>
+            </li>
+            <li class="{{ tasks_active }}">
+                <a href="#"><i class="fa  fa-coffee"></i> <span class="nav-label">作业中心</span>
+                    <span class="fa arrow"> </span></a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ tasks_cmd_active }}"><a href="{% url    'tasks:cmd' %}">命令操作</a></li>
+                     <li class="{{ tasks_tail_active }}"><a href="{% url    'tasks:tail' %}">日志接口</a></li>
+                    <li class="{{ tools_active }}"><a href="{% url    'tasks:tools' %}">脚本工具</a></li>
+                    <li class="{{ vars_active }}"><a href="{% url    'tasks:vars' %}">主机变量</a></li>
+                    <li class="{{ tools_exec_active }}"><a href="{% url    'tasks:tools_exec' %}">创建任务</a></li>
+                    <li class="{{ tools_results_active }}"><a href="{% url    'tasks:tools_results' %}">任务结果</a></li>
+                </ul>
+            </li>
+
+                    <li class="{{ crontab_active }}">
+                <a href="#"><i class="fa  fa-desktop"></i> <span class="nav-label">定时任务</span>
+                    <span class="fa arrow"> </span></a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ crontab_crontabs_active }}"><a href="{% url    'crontabs:crontabs_list' %}">定时时间</a></li>
+                     <li class="{{ crontab_intervals_active }}"><a href="{% url    'crontabs:intervals_list' %}">时间间隔</a></li>
+                      <li class="{{ crontab_periodictasks_active }}"><a href="{% url    'crontabs:periodictasks_list' %}">周期任务</a></li>
+                     <li class="{{ crontab_periodictasks_result_active }}"><a href="{% url    'crontabs:periodictasks_result' %}">周期结果</a></li>
+                </ul>
+
+            </li>
+
+
+         {% ifequal  user.is_superuser  1 %}
+            <li class="{{ name_active }}">
+                <a href="#"><i class="fa fa-group"></i> <span class="nav-label">系统用户</span>
+                    <span class="fa arrow"> </span></a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ name_list_active }}"><a href="{% url  'name:name_list' %}">用户管理</a></li>
+                      <li class="{{ groups_list_active }}"><a href="{% url  'name:groups_list' %}">组管理</a></li>
+                     <li class="{{  groups_object_list_active }}"><a href="{% url  'name:groups_object_list' %}">权限管理</a></li>
+
+
+                </ul>
+            </li>
+
+            <li class="{{ index_active }}">
+                <a href="#"><i class="fa fa-gears"></i> <span class="nav-label">后台管理</span>
+                    <span class="fa arrow"> </span></a>
+                <ul class="nav nav-second-level">
+                    <li class="{{ index_login_active }}"><a href="{% url  'login-history' %}">平台登录</a></li>
+                    <li><a href="/admin" target="_blank">管理界面</a></li>
+
+                </ul>
+            </li>
+        {% endifequal %}
+        </ul>
+
+    </div>
+</nav>
